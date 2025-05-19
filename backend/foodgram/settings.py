@@ -14,6 +14,9 @@ ALLOWED_HOSTS = []
 
 
 INSTALLED_APPS = [
+    'users',
+    'recipes',
+    'api',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -24,9 +27,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'djoser',
     'django_filters',
-    'users',
-    'recipes',
-    'api',
 ]
 
 MIDDLEWARE = [
@@ -68,7 +68,7 @@ DATABASES = {
 }
 
 
-AUTH_USER_MODEL = "users.CustomUser"
+AUTH_USER_MODEL = "users.User"
 
 AUTH_PASSWORD_VALIDATORS = [
     {

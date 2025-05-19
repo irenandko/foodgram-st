@@ -7,7 +7,7 @@ from foodgram.constants import (USER_NAMES_MAX_LENGTH,
                                 USER_REGEX_CONTROLLER)
 
 
-class CustomUser(AbstractUser):
+class User(AbstractUser):
     """Класс пользователя."""
 
     REQUIRED_FIELDS = ["username", "first_name", "last_name"]  # for superuser
@@ -54,12 +54,12 @@ class Subscription(models.Model):
     """Класс отображения подписки."""
 
     user: models.ForeignKey = models.ForeignKey(
-        CustomUser,
+        User,
         on_delete=models.CASCADE,
         related_name='subscriptions'
     )
     author: models.ForeignKey = models.ForeignKey(
-        CustomUser,
+        User,
         on_delete=models.CASCADE,
         related_name='subscribers'
     )

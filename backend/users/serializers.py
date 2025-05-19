@@ -4,7 +4,7 @@ import imghdr
 from rest_framework import serializers
 from djoser.serializers import UserSerializer
 from django.core.files.base import ContentFile
-from users.models import CustomUser, Subscription
+from users.models import User, Subscription
 from recipes.serializers import RecipeShortSerializer
 
 
@@ -29,7 +29,7 @@ class CustomUserSerializer(UserSerializer):
     is_subscribed = serializers.SerializerMethodField()
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = UserSerializer.Meta.fields + ('avatar', 'is_subscribed')
 
     def get_is_subscribed(self, obj):
@@ -46,7 +46,7 @@ class SubscriptionSerializer(CustomUserSerializer):
     recipes_count = serializers.ReadOnlyField(source='recipes.count')
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = CustomUserSerializer.Meta.fields + (
             'recipes', 'recipes_count',
         )
@@ -91,5 +91,5 @@ class AvatarSerializer(serializers.ModelSerializer):
     avatar = ReformattingBase64()
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = ('avatar',)
