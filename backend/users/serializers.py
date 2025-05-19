@@ -5,6 +5,7 @@ from rest_framework import serializers
 from djoser.serializers import UserSerializer
 from django.core.files.base import ContentFile
 from users.models import CustomUser, Subscription
+from recipes.serializers import RecipeShortSerializer
 
 
 class ReformattingBase64(serializers.ImageField):
@@ -49,6 +50,15 @@ class SubscriptionSerializer(CustomUserSerializer):
         fields = CustomUserSerializer.Meta.fields + (
             'recipes', 'recipes_count',
         )
+
+    def get_recipes(self, obj):
+        request = self.context.get('request')
+        limit = request.query_params.get('recipes_limit')
+        queryset = obj.recipes.all()
+        if limit and limit.isdigit():
+            queryset = queryset[:int(limit)]
+        return RecipeShortSerializer(queryset, many=True,
+                                     context=self.context).data
 
 
 class SubscriptionCreateSerializer(serializers.ModelSerializer):
