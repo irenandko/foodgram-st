@@ -1,29 +1,11 @@
-import base64
-import imghdr
-
 from rest_framework import serializers
 from djoser.serializers import UserSerializer
-from django.core.files.base import ContentFile
 from users.models import User, Subscription
-from recipes.serializers import RecipeShortSerializer
-
-
-class ReformattingBase64(serializers.ImageField):
-    """Переформатирование фото профиля из base64."""
-
-    def to_internal_value(self, data):
-        if isinstance(data, str) and data.startswith('data:image'):
-            format, img_str = data.split(';base64,')
-            ext = imghdr.what(None, h=base64.b64decode(img_str))
-            content = ContentFile(
-                base64.b64decode(img_str),
-                name=f'temp.{ext}')
-
-        return super().to_internal_value(content)
+from foodgram.reformat_image import ReformattingBase64
 
 
 class CustomUserSerializer(UserSerializer):
-    """Сериализатор для пользователя."""
+    """Сериализатор для отображения данных пользователя."""
 
     avatar = ReformattingBase64()
     is_subscribed = serializers.SerializerMethodField()
@@ -39,30 +21,8 @@ class CustomUserSerializer(UserSerializer):
                 and obj.subscriptions.filter(user=request.user).exists())
 
 
-class SubscriptionSerializer(CustomUserSerializer):
-    """Сериализатор для подписок."""
-
-    recipes = serializers.SerializerMethodField()
-    recipes_count = serializers.ReadOnlyField(source='recipes.count')
-
-    class Meta:
-        model = User
-        fields = CustomUserSerializer.Meta.fields + (
-            'recipes', 'recipes_count',
-        )
-
-    def get_recipes(self, obj):
-        request = self.context.get('request')
-        limit = request.query_params.get('recipes_limit')
-        queryset = obj.recipes.all()
-        if limit and limit.isdigit():
-            queryset = queryset[:int(limit)]
-        return RecipeShortSerializer(queryset, many=True,
-                                     context=self.context).data
-
-
 class SubscriptionCreateSerializer(serializers.ModelSerializer):
-    """Сериализатор для оформления подписки."""
+    """Сериализатор для оформления подписки на автора."""
 
     class Meta:
         model = Subscription
@@ -85,8 +45,21 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
                                       context=self.context).data
 
 
+class SubscriptionSerializer(CustomUserSerializer):
+    """Сериализатор для деталей подписок."""
+
+    recipes = serializers.SerializerMethodField()
+    recipes_count = serializers.ReadOnlyField(source='recipes.count')
+
+    class Meta:
+        model = User
+        fields = CustomUserSerializer.Meta.fields + (
+            'recipes', 'recipes_count',
+        )
+
+
 class AvatarSerializer(serializers.ModelSerializer):
-    """Сериализатор для фото профиля."""
+    """Сериализатор отдельно для фото профиля (обновление)."""
 
     avatar = ReformattingBase64()
 
