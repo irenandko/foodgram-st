@@ -39,11 +39,7 @@ class RecipeReadSerializer(serializers.ModelSerializer):
 
     image = ReformattingBase64()
     author = CustomUserSerializer(read_only=True)
-    ingredients = RecipeIngredientSerializer(
-        many=True,
-        read_only=True,
-        source='recipeingredient_set',
-    )
+    ingredients = serializers.SerializerMethodField()
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
 
@@ -73,6 +69,18 @@ class RecipeReadSerializer(serializers.ModelSerializer):
 
     def get_is_in_shopping_cart(self, obj):
         return self._check_user_relation(obj.shopping_carts)
+ 
+    def get_ingredients(self, obj):
+        ingredients = []
+        for ingredient_in_recipe in obj.ingredientinrecipe_set.all():
+            ingredient = ingredient_in_recipe.ingredient
+            ingredients.append({
+                'id': ingredient.id,
+                'name': ingredient.name,
+                'amount': ingredient_in_recipe.amount,
+                'measurement_unit': ingredient.measurement_unit
+            })
+        return ingredients
 
 
 class RecipeWriteSerializer(serializers.ModelSerializer):
@@ -132,7 +140,7 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         ingredients = validated_data.pop('ingredients')
         instance = super().update(instance, validated_data)
-        instance.recipeingredient_set.all().delete()
+        instance.ingredientinrecipe_set.all().delete()
         self.create_ingredients(instance, ingredients)
         return instance
 
