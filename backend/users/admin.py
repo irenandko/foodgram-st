@@ -7,7 +7,7 @@ from .models import User, Subscription
 class CustomUserAdmin(UserAdmin):
     list_display = ('id', 'first_name', 'last_name', 'username', 'email',)
     list_filter = ('username', 'email')
-    search_fields = ('username', 'email')
+    search_fields = ('username', 'email', 'first_name')
 
 
 @admin.register(Subscription)
