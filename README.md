@@ -19,12 +19,14 @@ cd foodgram-st
 ```
 В корне проекта разместите .env файл со следующей структурой:
 
-```POSTGRES_USER=django_user```
-```POSTGRES_PASSWORD=django_password```
-```POSTGRES_DB=django_db```
-```DB_HOST=db```
-```DB_PORT=5432```
-```SECRET_KEY="django-insecure-64hnnmqdw4a9y^9koemq$r1m+!o(*#=)0pbroo9g-j6&8&%l2p" # для примера```
+```
+POSTGRES_USER=django_user
+POSTGRES_PASSWORD=django_password
+POSTGRES_DB=django_db
+DB_HOST=db
+DB_PORT=5432
+SECRET_KEY="django-insecure-64hnnmqdw4a9y^9koemq$r1m+!o(*#=)0pbroo9g-j6&8&%l2p" # для примера
+```
 
 ## Сборка 
 Находясь в корне проекта начните сборку проекта командой:
@@ -59,8 +61,8 @@ docker-compose exec backend python manage.py load_recipe_list
 ```
 
 ## Основные страницы
-Главная страница - http://localhost
-Админка - http://localhost/admin/
+- Главная страница - http://localhost
+- Админка - http://localhost/admin/
 
 * Если Вам отображается приветствие Nginx, попробуйте открыть сайт в режиме Инкогнито (возможен остаточный кэш страниц)
 
