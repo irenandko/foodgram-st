@@ -34,7 +34,10 @@ SECRET_KEY="django-insecure-64hnnmqdw4a9y^9koemq$r1m+!o(*#=)0pbroo9g-j6&8&%l2p" 
 docker-compose up -d --build
 ```
 
-Далее откройте новое окно терминала и в нем примените миграции:
+Далее откройте новое окно терминала, создайте и примените миграции:
+```
+docker-compose exec backend python manage.py makemigrations
+```
 ```
 docker-compose exec backend python manage.py migrate
 ```
