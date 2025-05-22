@@ -10,9 +10,13 @@
 ## :rocket: Клонирование и запуск проекта
 Проверьте, что Docker работает (Engine running).
 Склонируйте репозиторий с проектом на свой компьютер - в терминале из рабочей директории выполните команду:
-```git clone https://github.com/irenandko/foodgram-st.git```
+```
+git clone https://github.com/irenandko/foodgram-st.git
+```
 Перейдите в главную директорию проекта
-```cd foodgram-st```
+```
+cd foodgram-st
+```
 В корне проекта разместите .env файл со следующей структурой:
 
 ```POSTGRES_USER=django_user```
@@ -24,21 +28,35 @@
 
 ## Сборка 
 Находясь в корне проекта начните сборку проекта командой:
-```docker-compose up -d --build```
+```
+docker-compose up -d --build
+```
 
 Далее откройте новое окно терминала и в нем примените миграции:
-```docker-compose exec backend python manage.py migrate```
+```
+docker-compose exec backend python manage.py migrate
+```
 
 Соберите статические материалы:
-```docker-compose exec backend python manage.py collectstatic --noinput```
+```
+docker-compose exec backend python manage.py collectstatic --noinput
+```
 
 Создайте суперпользователя для админки:
-```docker-compose exec backend python manage.py createsuperuser```
+```
+docker-compose exec backend python manage.py createsuperuser
+```
 
 На данном этапе проект уже работает, но стоит заполнить его данными, поэтому загрузите пользователей, ингридиенты и рецепты:
-```docker-compose exec backend python manage.py load_author_list```
-```docker-compose exec backend python manage.py load_ingridient_list```
-```docker-compose exec backend python manage.py load_recipe_list```
+```
+docker-compose exec backend python manage.py load_author_list
+```
+```
+docker-compose exec backend python manage.py load_ingridient_list
+```
+```
+docker-compose exec backend python manage.py load_recipe_list
+```
 
 ## Основные страницы
 Главная страница - http://localhost
@@ -47,7 +65,9 @@
 * Если Вам отображается приветствие Nginx, попробуйте открыть сайт в режиме Инкогнито (возможен остаточный кэш страниц)
 
 Чтобы остановить работу проекта нажмите Ctrl+C, а затем выполните команду:
-```docker compose down```
+```
+docker compose down
+```
 
 ## Автор проекта
 Лазаренко Ирина
